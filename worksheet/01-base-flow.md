@@ -25,7 +25,21 @@ Nếu chưa hiểu → quay lại đọc lại 1 lần nữa. Đừng đi tiếp
 Vẽ flow ra giấy hoặc trên bảng (1 thành viên vẽ, cả nhóm góp ý). Có thể dùng ASCII đơn giản:
 
 ```text
-(vẽ flow của nhóm vào đây — hoặc dán link ảnh chụp bảng)
+[User input] --> [Intent Classifier] 
+                     |
+        +-------+----+----+-------+
+        |       |         |       |
+      Visa    Guide    Weather  Booking / Complaint
+        |       |         |       |
+       RAG     RAG       Web    Handoff to Human ($0)
+      +Web?               |       |
+        \       |         /       |
+         [Context Assembly]       |
+         (System+History+RAG+Web) |
+                  |               |
+         [Response Generation]    |
+                  |               |
+              [User sees response]
 ```
 
 Khi vẽ, đảm bảo flow có 4 điểm:
@@ -56,11 +70,11 @@ Trước khi điền vào ô bên dưới, đọc nhanh mục **3. Decision Poin
 Options:
 
 ```text
-□ Cheap        (Gemini Flash-Lite / DeepSeek V4 Flash / GPT-4o-mini)
-□ Mid          (Gemini Flash / Claude Haiku 4.5)
-□ Strong       (DeepSeek V4 Pro / Claude Sonnet 4.6)
-□ Premium      (Claude Opus 4.7 / GPT-5.5)
-□ Mix          (model khác nhau cho intent khác nhau — viết rõ)
+☑ Cheap        (Gemini Flash-Lite / DeepSeek V4 Flash / GPT-4o-mini)
+☑ Mid          (Gemini Flash / Claude Haiku 4.5)
+☑ Strong       (DeepSeek V4 Pro / Claude Sonnet 4.6)
+☑ Premium      (Claude Opus 4.7 / GPT-5.5)
+☑ Mix          (model khác nhau cho intent khác nhau — viết rõ)
 ```
 
 **Câu hỏi gợi mở cho nhóm** (trả lời trước khi chọn):
@@ -70,7 +84,10 @@ Options:
 - Có nên dùng cheap cho phân loại + strong cho trả lời không?
 
 ```text
-(viết suy nghĩ của nhóm vào đây — chưa cần chốt option, chỉ cần thấy hướng)
+Chúng ta sẽ cân bằng chi phí và chất lượng bằng cách thử các config khác nhau.
+Config rẻ sẽ dùng cheap model cho tất cả.
+Config smart mix sẽ dùng cheap model để phân loại intent, mid model cho trả lời.
+Config premium sẽ dùng mid để phân loại và premium model cho tất cả response để đảm bảo chất lượng cực cao.
 ```
 
 ### Knob 2 — Web search
@@ -80,9 +97,9 @@ Options:
 Options:
 
 ```text
-□ OFF              (chỉ dùng RAG — knowledge base có sẵn)
-□ ON selective    (bật cho 1–2 intent cần real-time: visa, weather)
-□ ON broad         (bật cho hầu hết intent)
+☑ OFF              (chỉ dùng RAG — knowledge base có sẵn)
+☑ ON selective    (bật cho 1–2 intent cần real-time: visa, weather)
+☑ ON broad         (bật cho hầu hết intent)
 ```
 
 **Câu hỏi gợi mở:**
@@ -92,7 +109,7 @@ Options:
 - Web search tốn $0.005/call + 800 tokens — bật bừa có lợi không?
 
 ```text
-(viết suy nghĩ của nhóm vào đây)
+Web search thực sự cần thiết cho Weather và Visa Policy vì những thông tin này thay đổi liên tục. Nếu tắt hoàn toàn (budget mode), chatbot có nguy cơ cung cấp sai info. Với config đắt tiền, bật web search broad giúp response luôn có ngữ cảnh hiện tại.
 ```
 
 ### Knob 3 — History management
@@ -102,9 +119,9 @@ Options:
 Options:
 
 ```text
-□ Last 3 turns        (nhẹ nhất, dễ quên)
-□ Last 5 turns        (cân bằng)
-□ Full history        (nhớ tất cả, đắt nhất ở conv dài)
+☑ Last 3 turns        (nhẹ nhất, dễ quên)
+☑ Last 5 turns        (cân bằng)
+☑ Full history        (nhớ tất cả, đắt nhất ở conv dài)
 □ Summarize every 5   (nâng cao — cần 1 LLM call phụ để tóm tắt)
 ```
 
@@ -115,7 +132,10 @@ Options:
 - Scenario B trung bình 7 lượt → mỗi turn thêm 260 tokens — tổng thêm bao nhiêu?
 
 ```text
-(viết suy nghĩ của nhóm vào đây)
+History càng nhiều càng tốn kém nhanh chóng (số tokens tăng tuyến tính theo turn).
+Budget mode chỉ cần nhớ last 3.
+Smart Mix giữ cân bằng với last 5.
+Premium concierge sẽ nhớ Full history để cá nhân hoá tối đa.
 ```
 
 ---
@@ -127,34 +147,34 @@ Chưa cần quyết định cuối cùng. Chỉ cần phác thảo: nhóm dự �
 **Combo 1 (định hướng cheap)**:
 
 ```text
-Model: ___    Web: ___    History: ___    (đặt tên dự kiến: ___)
+Model: Cheap    Web: OFF    History: Last 3    (đặt tên dự kiến: Budget Bot)
 ```
 
 **Combo 2 (định hướng premium)**:
 
 ```text
-Model: ___    Web: ___    History: ___    (đặt tên dự kiến: ___)
+Model: Premium  Web: Broad  History: Full      (đặt tên dự kiến: Premium Concierge)
 ```
 
 **Combo 3 (định hướng balanced / smart mix)**:
 
 ```text
-Model: ___    Web: ___    History: ___    (đặt tên dự kiến: ___)
+Model: Mid      Web: Selective  History: Last 5    (đặt tên dự kiến: Smart Mix)
 ```
 
 **Combo 4** (optional — nếu nhóm có ý tưởng khác):
 
 ```text
-Model: ___    Web: ___    History: ___    (đặt tên dự kiến: ___)
+Model: Mix      Web: Selective  History: Summarize (đặt tên dự kiến: Tech Savvy)
 ```
 
 ---
 
 ## Bảng kiểm trước khi sang file tiếp theo
 
-- [ ] Đã vẽ flow base có đủ 4 bước (Intent → Route → Context → Response)
-- [ ] Hiểu Booking + Khiếu nại = $0 LLM cost (chuyển con người)
-- [ ] Đã phác thảo ≥3 combo khác nhau (chưa cần chi tiết)
-- [ ] Nhóm đồng thuận về hướng đi mỗi combo
+- [x] Đã vẽ flow base có đủ 4 bước (Intent → Route → Context → Response)
+- [x] Hiểu Booking + Khiếu nại = $0 LLM cost (chuyển con người)
+- [x] Đã phác thảo ≥3 combo khác nhau (chưa cần chi tiết)
+- [x] Nhóm đồng thuận về hướng đi mỗi combo
 
 Xong → 10:25 chuyển sang **Main phase**. Mở `02-config-design.md`.

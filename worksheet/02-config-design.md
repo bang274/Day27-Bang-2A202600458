@@ -25,7 +25,7 @@ Tham khảo bảng pricing chi tiết tại `cost-reference-card.md` mục **3. 
 **Tên config** (gợi mở: "Budget Bot", "Bare Minimum", "Lean Mode", "Night Mode" — đặt tên có cá tính):
 
 ```text
-(điền tên vào đây)
+Budget Bot
 ```
 
 ### 3 Knobs
@@ -33,14 +33,14 @@ Tham khảo bảng pricing chi tiết tại `cost-reference-card.md` mục **3. 
 **① Model tier**:
 
 ```text
-Response model: __________________ → giá $_____ / $_____  per 1M tokens (input/output)
-Classifier model: __________________ → giá $_____ / $_____  per 1M tokens (hoặc keyword = $0)
+Response model: Gemini 2.5 Flash-Lite → giá $0.10 / $0.40  per 1M tokens (input/output)
+Classifier model: Gemini 2.5 Flash-Lite → giá $0.10 / $0.40  per 1M tokens (hoặc keyword = $0)
 ```
 
 **② Web search**:
 
 ```text
-□ OFF
+☑ OFF
 □ ON selective — bật cho intent: __________________
 □ ON broad
 ```
@@ -48,7 +48,7 @@ Classifier model: __________________ → giá $_____ / $_____  per 1M tokens (ho
 **③ History management**:
 
 ```text
-□ Last 3
+☑ Last 3
 □ Last 5
 □ Full
 □ Summarize every ___ turns
@@ -63,14 +63,15 @@ Trước khi viết, tự hỏi:
 - Khách hàng nào sẽ hài lòng nhất với config này? Khách nào sẽ thất vọng?
 
 ```text
-(điền 2–3 câu lý do vào đây)
+Config này tiết kiệm chi phí tối đa, rất phù hợp khi traffic tăng cao đột biến hoặc để thử nghiệm sản phẩm lúc mới launch.
+Trade-off lớn nhất là thiếu thông tin web real-time (như visa, thời tiết), nên có thể cung cấp thông tin cũ.
+Khách hàng chỉ có câu hỏi cơ bản (chỉ dẫn đơn giản) sẽ hài lòng, nhưng khách muốn advice phức tạp sẽ thấy thiếu sót.
 ```
 
 ### Rủi ro lớn nhất của config này
 
 ```text
-(điền 1 câu rủi ro — ví dụ: "Visa info có thể outdated nếu web OFF",
- "Khách quên context khi history Last 3", "Cost spike nếu volume tăng đột biến")
+Visa info có thể outdated vì Web OFF, dẫn đến rủi ro hành khách gặp rắc rối xuất nhập cảnh.
 ```
 
 ---
@@ -80,7 +81,7 @@ Trước khi viết, tự hỏi:
 **Tên config**:
 
 ```text
-(điền tên vào đây)
+Smart Mix
 ```
 
 ### 3 Knobs
@@ -88,15 +89,15 @@ Trước khi viết, tự hỏi:
 **① Model tier**:
 
 ```text
-Response model: __________________ → giá $_____ / $_____  per 1M tokens
-Classifier model: __________________ → giá $_____ / $_____  per 1M tokens (hoặc keyword)
+Response model: Gemini 2.5 Flash → giá $0.30 / $2.50  per 1M tokens
+Classifier model: Gemini 2.5 Flash-Lite → giá $0.10 / $0.40  per 1M tokens (hoặc keyword)
 ```
 
 **② Web search**:
 
 ```text
 □ OFF
-□ ON selective — bật cho intent: __________________
+☑ ON selective — bật cho intent: Visa/Policy, Weather/Event
 □ ON broad
 ```
 
@@ -104,7 +105,7 @@ Classifier model: __________________ → giá $_____ / $_____  per 1M tokens (ho
 
 ```text
 □ Last 3
-□ Last 5
+☑ Last 5
 □ Full
 □ Summarize every ___ turns
 ```
@@ -112,13 +113,15 @@ Classifier model: __________________ → giá $_____ / $_____  per 1M tokens (ho
 ### Lý do nhóm chọn config này
 
 ```text
-(điền 2–3 câu lý do vào đây)
+Config này hướng đến điểm cân bằng giữa chi phí và chất lượng cho phần lớn user.
+Bật web search chọn lọc giúp đảm bảo các câu hỏi nhạy cảm như visa luôn chính xác, còn model Mid giúp ngôn ngữ được mượt mà hơn model Cheap.
+Sử dụng history 5 lượt đảm bảo đa số các cuộc hội thoại đều giữ được trọn context.
 ```
 
 ### Rủi ro lớn nhất của config này
 
 ```text
-(điền 1 câu rủi ro)
+Cost có thể tăng nếu lượt chat vượt quá 5 lượt ở mùa cao điểm do web search tốn thêm token cho history.
 ```
 
 ---
@@ -128,7 +131,7 @@ Classifier model: __________________ → giá $_____ / $_____  per 1M tokens (ho
 **Tên config**:
 
 ```text
-(điền tên vào đây)
+Premium Concierge
 ```
 
 ### 3 Knobs
@@ -136,8 +139,8 @@ Classifier model: __________________ → giá $_____ / $_____  per 1M tokens (ho
 **① Model tier**:
 
 ```text
-Response model: __________________ → giá $_____ / $_____  per 1M tokens
-Classifier model: __________________ → giá $_____ / $_____  per 1M tokens (hoặc keyword)
+Response model: Claude Opus 4.7 → giá $5.00 / $25.00  per 1M tokens
+Classifier model: Gemini 2.5 Flash → giá $0.30 / $2.50  per 1M tokens (hoặc keyword)
 ```
 
 **② Web search**:
@@ -145,7 +148,7 @@ Classifier model: __________________ → giá $_____ / $_____  per 1M tokens (ho
 ```text
 □ OFF
 □ ON selective — bật cho intent: __________________
-□ ON broad
+☑ ON broad
 ```
 
 **③ History management**:
@@ -153,56 +156,32 @@ Classifier model: __________________ → giá $_____ / $_____  per 1M tokens (ho
 ```text
 □ Last 3
 □ Last 5
-□ Full
+☑ Full
 □ Summarize every ___ turns
 ```
 
 ### Lý do nhóm chọn config này
 
 ```text
-(điền 2–3 câu lý do vào đây)
+Cung cấp dịch vụ tốt nhất có thể, thay thế hoàn toàn nhân viên sales giỏi.
+Được dùng cho các cuộc chat VIP hoặc khi margin doanh thu trên booking rất cao.
+Sử dụng Opus 4.7 kết hợp với full web search đảm bảo độ thông minh, reasoning và thông tin luôn cập nhật cho mọi câu hỏi.
 ```
 
 ### Rủi ro lớn nhất của config này
 
 ```text
-(điền 1 câu rủi ro)
-```
-
----
-
-## Config 4 (optional — nếu thời gian dư)
-
-Nhóm có thể thiết kế thêm config thứ 4 để có thêm điểm so sánh. Không bắt buộc.
-
-**Tên config**:
-
-```text
-(điền tên vào đây)
-```
-
-### 3 Knobs
-
-```text
-Model: ___    Web: ___    History: ___
-```
-
-### Lý do
-
-```text
-(điền 1–2 câu)
+Chi phí tăng theo cấp số nhân trong các cuộc đối thoại dài (có thể lên tới $4000/tháng), ảnh hưởng đến biên lợi nhuận của dịch vụ booking rẻ.
 ```
 
 ---
 
 ## Bảng kiểm trước khi tính cost
 
-- [ ] ≥3 configs đã đặt tên (không chỉ "Config 1/2/3")
-- [ ] Mỗi config đã chốt rõ 3 knobs (không còn ô trống)
-- [ ] Mỗi config có ≥2 câu lý do
-- [ ] 3 configs đủ khác biệt — không phải chỉ đổi mỗi 1 knob nhỏ
-- [ ] Nhóm đồng thuận đây là 3 configs đáng so sánh
-
-**Nếu 3 configs quá giống nhau** (chỉ đổi model, knobs khác giống hệt) → quay lại tweak. Mục đích là thấy tradeoff — configs giống nhau quá → không thấy tradeoff.
+- [x] ≥3 configs đã đặt tên (không chỉ "Config 1/2/3")
+- [x] Mỗi config đã chốt rõ 3 knobs (không còn ô trống)
+- [x] Mỗi config có ≥2 câu lý do
+- [x] 3 configs đủ khác biệt — không phải chỉ đổi mỗi 1 knob nhỏ
+- [x] Nhóm đồng thuận đây là 3 configs đáng so sánh
 
 Xong → mở `03-cost-calculation.md` để bắt đầu tính cost.
