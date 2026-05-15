@@ -37,7 +37,7 @@ Viết **5–7 câu hỏi bằng tiếng Anh** mình sẽ thật sự gửi cho 
 5. How do I get from Noi Bai airport to the Old Quarter in Hanoi?
 ```
 
-### Tourist #2 (Tên thành viên: Minh)
+### Tourist #2 (Tên thành viên: Phan Thị Mai Phương)
 
 ```text
 1. I’m arriving from the UK next month, is the e-visa process fast?
